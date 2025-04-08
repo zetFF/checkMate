@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags untuk konfigurasi dasar HTML -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskFlow - Modern Todo App</title>
+    <!-- CSRF token untuk keamanan Laravel -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Updated Typography -->
+    <!-- Font dari Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS dari Vite -->
     @vite('resources/css/app.css')
+    <!-- Font Awesome untuk ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Floating UI untuk dropdown dan tooltip -->
     <script src="https://unpkg.com/@floating-ui/core@1.5.0"></script>
     <script src="https://unpkg.com/@floating-ui/dom@1.5.0"></script>
+    <!-- Alpine.js untuk interaktivitas -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-[#F8FAFC] min-h-screen font-inter">
-    <!-- Header with Logout -->
+    <!-- Header dengan logo dan tombol logout -->
     <header class="w-full border-b border-gray-100 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
+                <!-- Logo aplikasi -->
                 <div class="flex items-center">
                     <h1 class="text-2xl font-jakarta font-bold text-indigo-600">✓ Checkmate</h1>
                 </div>
+                <!-- Informasi user dan tombol logout -->
                 <div class="flex items-center space-x-4">
                     <span class="text-gray-600 font-medium">{{ Auth::user()->name }}</span>
                     <form method="POST" action="{{ route('logout') }}">
@@ -35,15 +43,17 @@
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Konten utama aplikasi -->
     <div class="p-8">
-        <!-- Header & Search -->
+        <!-- Header dan pencarian -->
         <div class="max-w-5xl mx-auto">
             <div class="flex justify-between items-center mb-8">
+                <!-- Judul dan tanggal -->
                 <div>
                     <h2 class="text-3xl font-jakarta font-bold text-gray-900 tracking-tight">My Tasks</h2>
                     <p class="text-gray-500 font-medium tracking-wide mt-1">{{ now()->format('l, F j, Y') }}</p>
                 </div>
+                <!-- Form pencarian -->
                 <div class="relative w-96">
                     <form action="{{ route('todos.index') }}" method="GET">
                         <input type="text" 
@@ -58,12 +68,13 @@
                 </div>
             </div>
 
-            <!-- Quick Add Task -->
+            <!-- Form untuk menambahkan task baru -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
                 <h3 class="text-xl font-jakarta font-semibold text-gray-900 mb-6 tracking-tight">Create New Task</h3>
                 <form action="{{ route('todos.store') }}" method="POST" class="space-y-6">
                     @csrf
                     <div class="grid grid-cols-2 gap-6">
+                        <!-- Kolom kiri: Nama dan deskripsi task -->
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1 tracking-wide">Task Name</label>
@@ -82,9 +93,11 @@
                                           required></textarea>
                             </div>
                         </div>
+                        <!-- Kolom kanan: Prioritas dan tanggal jatuh tempo -->
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1 tracking-wide">Priority Level</label>
+                                <!-- Dropdown prioritas menggunakan Alpine.js -->
                                 <div x-data="{ open: false, selected: '' }" class="relative">
                                     <button type="button" 
                                             @click="open = !open"
@@ -116,6 +129,7 @@
                                            :class="{ 'transform rotate-180': open }"></i>
                                     </button>
 
+                                    <!-- Dropdown menu untuk pilihan prioritas -->
                                     <div x-show="open" 
                                          @click.away="open = false"
                                          x-transition:enter="transition ease-out duration-200"
@@ -126,6 +140,7 @@
                                          x-transition:leave-end="opacity-0 transform scale-95"
                                          class="absolute z-50 mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-100 py-2">
                                         
+                                        <!-- Opsi prioritas tinggi -->
                                         <div @click="selected = 'high'; open = false" 
                                              class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
                                             <div class="flex items-center space-x-3">
@@ -135,6 +150,7 @@
                                             <i class="fas fa-check text-red-500" x-show="selected === 'high'"></i>
                                         </div>
 
+                                        <!-- Opsi prioritas sedang -->
                                         <div @click="selected = 'medium'; open = false" 
                                              class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
                                             <div class="flex items-center space-x-3">
@@ -144,6 +160,7 @@
                                             <i class="fas fa-check text-yellow-500" x-show="selected === 'medium'"></i>
                                         </div>
 
+                                        <!-- Opsi prioritas rendah -->
                                         <div @click="selected = 'low'; open = false" 
                                              class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
                                             <div class="flex items-center space-x-3">
@@ -157,6 +174,7 @@
                                     <input type="hidden" name="priority" x-model="selected" required>
                                 </div>
                             </div>
+                            <!-- Input tanggal jatuh tempo -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1 tracking-wide">Due Date</label>
                                 <input type="datetime-local" 
@@ -166,6 +184,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Tombol submit -->
                     <div class="flex justify-end">
                         <button type="submit" 
                                 class="px-6 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors duration-200 flex items-center font-medium tracking-wide">
@@ -176,13 +195,15 @@
                 </form>
             </div>
 
-            <!-- Tasks List -->
+            <!-- Daftar task yang ada -->
             <div class="space-y-4">
                 @foreach($todos as $todo)
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-shadow duration-200">
                     <div class="flex items-center justify-between">
+                        <!-- Informasi task -->
                         <div class="flex items-center space-x-4">
                             <div>
+                                <!-- Checkbox untuk menandai task selesai -->
                                 <input type="checkbox" 
                                        class="toggle-complete w-5 h-5 rounded-lg border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                        data-id="{{ $todo->id }}" 
@@ -195,8 +216,10 @@
                                 <p class="text-sm text-gray-500 mt-1 tracking-wide">{{ $todo->description }}</p>
                             </div>
                         </div>
+                        <!-- Informasi tambahan dan tombol aksi -->
                         <div class="flex items-center space-x-6">
                             <div class="text-right">
+                                <!-- Badge prioritas -->
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium tracking-wide
                                     {{ $todo->priority === 'high' ? 'bg-red-100 text-red-700' : 
                                        ($todo->priority === 'medium' ? 'bg-yellow-100 text-yellow-700' : 
@@ -204,11 +227,13 @@
                                     <i class="fas fa-flag mr-2 text-xs"></i>
                                     {{ ucfirst($todo->priority) }}
                                 </span>
+                                <!-- Tanggal jatuh tempo -->
                                 <p class="text-sm text-gray-500 mt-1 tracking-wide">
                                     <i class="far fa-clock mr-1"></i>
                                     {{ $todo->due_date->format('M j, g:i A') }}
                                 </p>
                             </div>
+                            <!-- Tombol edit dan hapus -->
                             <div class="flex space-x-2">
                                 <button class="edit-todo p-2 text-gray-400 hover:text-indigo-600 transition-colors duration-200"
                                         data-id="{{ $todo->id }}"
@@ -236,20 +261,23 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
+    <!-- Modal untuk mengedit task -->
     <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4 overflow-hidden">
+                <!-- Header modal -->
                 <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                     <h3 class="text-xl font-jakarta font-semibold text-gray-900 tracking-tight">Edit Task</h3>
                     <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
+                <!-- Form edit -->
                 <form id="editForm" method="POST" class="p-6">
                     @csrf
                     @method('PUT')
                     <div class="grid grid-cols-2 gap-6">
+                        <!-- Kolom kiri: Nama dan deskripsi -->
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1 tracking-wide">Task Name</label>
@@ -260,9 +288,11 @@
                                 <textarea name="description" class="w-full px-4 py-2.5 rounded-xl border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" rows="3" required></textarea>
                             </div>
                         </div>
+                        <!-- Kolom kanan: Prioritas dan tanggal jatuh tempo -->
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1 tracking-wide">Priority Level</label>
+                                <!-- Dropdown prioritas menggunakan Alpine.js -->
                                 <div x-data="{ open: false, selected: '' }" class="relative">
                                     <button type="button" 
                                             @click="open = !open"
@@ -294,6 +324,7 @@
                                            :class="{ 'transform rotate-180': open }"></i>
                                     </button>
 
+                                    <!-- Dropdown menu untuk pilihan prioritas -->
                                     <div x-show="open" 
                                          @click.away="open = false"
                                          x-transition:enter="transition ease-out duration-200"
@@ -304,6 +335,7 @@
                                          x-transition:leave-end="opacity-0 transform scale-95"
                                          class="absolute z-50 mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-100 py-2">
                                         
+                                        <!-- Opsi prioritas tinggi -->
                                         <div @click="selected = 'high'; open = false" 
                                              class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
                                             <div class="flex items-center space-x-3">
@@ -313,6 +345,7 @@
                                             <i class="fas fa-check text-red-500" x-show="selected === 'high'"></i>
                                         </div>
 
+                                        <!-- Opsi prioritas sedang -->
                                         <div @click="selected = 'medium'; open = false" 
                                              class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
                                             <div class="flex items-center space-x-3">
@@ -322,6 +355,7 @@
                                             <i class="fas fa-check text-yellow-500" x-show="selected === 'medium'"></i>
                                         </div>
 
+                                        <!-- Opsi prioritas rendah -->
                                         <div @click="selected = 'low'; open = false" 
                                              class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
                                             <div class="flex items-center space-x-3">
@@ -335,12 +369,14 @@
                                     <input type="hidden" name="priority" x-model="selected" required>
                                 </div>
                             </div>
+                            <!-- Input tanggal jatuh tempo -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1 tracking-wide">Due Date</label>
                                 <input type="datetime-local" name="due_date" class="w-full px-4 py-2.5 rounded-xl border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" required>
                             </div>
                         </div>
                     </div>
+                    <!-- Tombol aksi modal -->
                     <div class="mt-6 flex justify-end space-x-3">
                         <button type="button" 
                                 class="px-6 py-2.5 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors duration-200 font-medium tracking-wide"
@@ -357,13 +393,17 @@
         </div>
     </div>
 
+    <!-- jQuery untuk interaktivitas -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        // Fungsi untuk menutup modal
         function closeModal() {
             document.getElementById('editModal').classList.add('hidden');
         }
 
+        // Inisialisasi jQuery saat dokumen siap
         $(document).ready(function() {
+            // Event handler untuk toggle status task
             $('.toggle-complete').change(function() {
                 const todoId = $(this).data('id');
                 $.ajax({
@@ -378,6 +418,7 @@
                 });
             });
 
+            // Event handler untuk membuka modal edit
             $('.edit-todo').click(function() {
                 const todo = $(this).data();
                 const modal = $('#editModal');
