@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Checkmate - Aplikasi Todo List Sederhana</title>
-        
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center py-6">
                     <div class="flex items-center">
-                        <h1 class="text-2xl font-sora font-bold text-indigo-600">✓ Checkmate</h1>
+                        <img width="100px" src="https://res.cloudinary.com/ddy7p8yrj/image/upload/v1741788561/b2vto9hri4zurpx5o25v.png" alt="">
                     </div>
                     <nav class="flex items-center gap-6">
                         @if (Route::has('login'))

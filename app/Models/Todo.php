@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Todo extends Model
 {
+    // dekalarasi table column
     protected $fillable = [
         'name',
         'description',
@@ -18,4 +19,4 @@ class Todo extends Model
         'due_date' => 'datetime',
         'is_completed' => 'boolean'
     ];
-} 
+}
