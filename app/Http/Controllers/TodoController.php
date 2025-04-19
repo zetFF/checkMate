@@ -16,7 +16,7 @@ class TodoController extends Controller
             $query->where('name', 'LIKE', "%{$search}%")
                   ->orWhere('description', 'LIKE', "%{$search}%");
         }
-        
+
         $todos = $query->latest()->get();
         return view('todos.index', compact('todos'));
     }
@@ -60,4 +60,4 @@ class TodoController extends Controller
         ]);
         return response()->json(['success' => true]);
     }
-} 
+}
